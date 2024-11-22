@@ -7,9 +7,10 @@ import rain_icon from "../assets/rain.png"
 import snow_icon from "../assets/snow.png"
 import wind_icon from "../assets/wind.png"
 import humidity_icon from "../assets/humidity.png"
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 const Weather = () => {
+  const inputRef = useRef()
   const [weatherData, setWeatherData] = useState(false)
 
   const allIcons = {
@@ -31,7 +32,7 @@ const Weather = () => {
 
   const search = async (city) => {
     try {
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${import.meta.env.VITE_APP_ID}`;
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${import.meta.env.VITE_APP_ID}&lang="pt-br"`;
 
       const response = await fetch(url);
       const data = await response.json();
@@ -56,8 +57,8 @@ const Weather = () => {
   return (
     <div className='weather'>
         <div className='search-bar'>
-            <input type="text" placeholder='Search' />
-            <img src={search_icon} />
+            <input ref={inputRef} type="text" placeholder='Search' />
+            <img src={search_icon} onClick={() => search(inputRef.current.value)} />
         </div>
         <img src={weatherData.icon} alt="" className='weather-icon' />
         <p className='temperature'>{weatherData.temperature}°c</p>
